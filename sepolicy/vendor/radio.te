@@ -1,0 +1,34 @@
+# radio.te
+
+allow radio system_app_data_file:dir { getattr search };
+
+# m.android.phone
+binder_call(radio, gpuservice)
+
+# cnd
+binder_call(radio, cnd)
+
+# CustomizationSelector
+binder_call(radio, hal_miscta_default)
+
+hwbinder_use(radio)
+
+allow radio hal_miscta_default:binder { call transfer };
+allow radio hal_miscta_hwservice:hwservice_manager find;
+
+# Allow android.phone to read ims prop
+get_prop(radio, vendor_qcom_ims_prop)
+
+# Allow CustomizationSelector look for /cache/modem/ on /cache
+allow radio cache_file:dir { search };
+
+# Allow CustomizationSelector access to /cache/modem/*
+allow radio modemsw_cache_file:dir rw_dir_perms;
+allow radio modemsw_cache_file:file create_file_perms;
+
+# Allow CustomizationSelector to read Sony props
+get_prop(radio, semc_version_prop)
+get_prop(radio, vendor_semc_version_cust_active_prop)
+
+# persist.sys.sim_config_ids
+set_prop(radio, semc_sim_prop)

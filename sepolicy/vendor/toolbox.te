@@ -1,0 +1,6 @@
+#allow toolbox self:capability {
+#    dac_override
+#};
+
+# rm -r /cache/lost+found
+allow toolbox cache_file:dir { read write getattr search rmdir open };
